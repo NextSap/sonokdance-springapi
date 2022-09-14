@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class TicketDao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long _id;
+    private long id;
     private String dj;
     private long eventDate;
     private String eventName;

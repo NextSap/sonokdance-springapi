@@ -4,8 +4,6 @@ import be.sonokdance.api.dao.TicketDao;
 import be.sonokdance.api.dto.TicketDto;
 import be.sonokdance.api.exception.TicketNotFoundException;
 import be.sonokdance.api.service.ticket.TicketService;
-import lombok.Data;
-import lombok.Getter;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -30,29 +27,9 @@ public class TicketController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TicketDao>> getTickets(@RequestParam SortType sortType) {
+    public ResponseEntity<List<TicketDao>> getTickets() {
         List<TicketDao> ticketList = ticketService.findAll();
-        List<TicketDao> newTicketList = new ArrayList<>();
-        for (TicketDao ticketDao : ticketList) {
-            long eventCreationDate = ticketDao.getEventDate();
-            switch (sortType.getType()) {
-                case "previous7days":
-                    if (eventCreationDate >= (System.currentTimeMillis() - 604800000) && (eventCreationDate < System.currentTimeMillis()))
-                        newTicketList.add(ticketDao);
-                    break;
-                case "next7days":
-                    if (eventCreationDate <= (System.currentTimeMillis() + 604800000) && (eventCreationDate > System.currentTimeMillis()))
-                        newTicketList.add(ticketDao);
-                    break;
-                case "notshowingpreviousevent":
-                case "none":
-                        newTicketList.add(ticketDao);
-                    break;
-                default:
-
-            }
-        }
-        return new ResponseEntity<>(newTicketList, new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(ticketList, new HttpHeaders(), HttpStatus.OK);
     }
 
     @SneakyThrows
@@ -85,19 +62,5 @@ public class TicketController {
     @DeleteMapping("/{id}")
     public void deleteTicket(@PathVariable long id) {
         ticketService.deleteById(id);
-    }
-}
-
-@Getter
-enum SortType {
-    NONE("none"),
-    PREVIOUS_7_DAYS("previous7days"),
-    NEXT_7_DAYS("next7days"),
-    NOT_SHOWING_PREVIOUS_EVENT("notshowingpreviousevent");
-
-    private final String type;
-
-    SortType(String type) {
-        this.type = type;
     }
 }

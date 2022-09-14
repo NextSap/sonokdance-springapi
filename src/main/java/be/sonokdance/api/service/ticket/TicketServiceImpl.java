@@ -25,7 +25,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<TicketDao> findAll() {
-        return (List<TicketDao>) ticketRepository.findAll();
+        return ticketRepository.findAll();
     }
 
     @Override
@@ -44,7 +44,7 @@ public class TicketServiceImpl implements TicketService {
     public Optional<TicketDao> update(long id, TicketDto ticketDto) {
         if (ticketRepository.findById(id).isPresent()) {
             TicketDao ticketDao = modelMapper.map(ticketDto, TicketDao.class);
-            ticketDao.set_id(id);
+            ticketDao.setId(id);
             TicketDao savedTicketDao = ticketRepository.save(ticketDao);
             return Optional.of(savedTicketDao);
         } else throw new TicketNotFoundException("Can't found ticket with id: "+id);

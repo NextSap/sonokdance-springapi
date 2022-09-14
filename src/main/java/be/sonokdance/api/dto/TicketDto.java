@@ -14,5 +14,5 @@ public class TicketDto {
     private String eventDescription;
     private String customerName;
     private String phoneNumber;
-    private String location;
+    private String eventLocation;
 }
